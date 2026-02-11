@@ -259,10 +259,35 @@
       .hero{padding-top:18px}
     }
 
+
+    /* Embedded map */
+    .map iframe{display:block;width:100%;}
+    @media (max-width: 680px){
+      .map iframe{height:280px;}
+    }
+
+
+    /* Cleaner first impression on mobile */
+    @media (max-width: 680px){
+      .pill{font-size:13px;padding:7px 10px}
+      .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+      .hero-actions .btn{width:100%}
+      .hero-media .label{display:none;} /* hide file label */
+      .hero-media{min-height:220px}
+      .card.pad{padding:16px}
+      .feature{padding:12px}
+    }
+
+
+    @media (max-width: 680px){
+      .topbar.is-collapsed .brand small{display:none;}
+      .topbar.is-collapsed .logo{width:34px;height:34px;border-radius:12px}
+    }
+
 </style>
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar is-collapsed">
     <div class="container">
       <div class="nav">
         <a class="brand" href="#home" data-nav="home" aria-label="홈">
@@ -298,7 +323,7 @@
         <div class="container">
           <div class="hero-grid">
             <div class="card pad">
-              <span class="pill">안내 · 캠핑장 소개</span>
+              <span class="pill">용인주원캠핑장 · 안내</span>
               <h1 class="title">용인주원캠핑장</h1>
               <p class="sub">
                 높게 우거진 화살나무가 3면으로 둘러싸여 하루 종일 그늘이 이어지는 아늑한 캠핑장입니다.
@@ -587,13 +612,27 @@
               <p>주소: 경기 용인시 처인구 원삼면 보개원삼로1415번길 11-14</p>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <a class="btn" target="_blank" rel="noopener" href="https://naver.me/xOdsYLjb" target="_blank" rel="noopener">네이버지도</a>
+              <a class="btn" target="_blank" rel="noopener" href="https://map.naver.com/p/entry/place/1302239045?lng=127.307411&lat=37.1206426&placePath=%2Fhome&entry=plt&searchType=place&c=15.00,0,0,0,dh" target="_blank" rel="noopener" target="_blank" rel="noopener" target="_blank" rel="noopener">네이버지도</a>
               <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q=%EA%B2%BD%EA%B8%B0%20%EC%9A%A9%EC%9D%B8%EC%8B%9C%20%EC%B2%98%EC%9D%B8%EA%B5%AC%20%EC%9B%90%EC%82%BC%EB%A9%B4%20%EB%B3%B4%EA%B0%9C%EC%9B%90%EC%82%BC%EB%A1%9C1415%EB%B2%88%EA%B8%B8%2011-14">구글지도</a>
               <a class="btn primary" href="tel:01088198931">문의전화</a>
             </div>
           </div>
 
           <div class="card pad">
+            <div style="height:12px"></div>
+            <div class="map" aria-label="지도">
+              <iframe
+                title="용인주원캠핑장 지도"
+                src="https://www.google.com/maps?q=37.1206426,127.307411&z=15&output=embed"
+                width="100%" height="360" style="border:0;"
+                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <p class="small" style="margin:10px 0 0">
+              네이버지도로 열기: <a href="https://map.naver.com/p/entry/place/1302239045?lng=127.307411&lat=37.1206426&placePath=%2Fhome&entry=plt&searchType=place&c=15.00,0,0,0,dh" target="_blank" rel="noopener" style="text-decoration:underline">지도 링크</a>
+            </p>
+
             <div class="grid2">
               <div>
                 <h3 style="margin:0 0 8px">연락처</h3>
@@ -616,9 +655,7 @@
                   <span>보개원삼로1415번길 11-14</span>
                 </div>
                 <div style="height:10px"></div>
-                <div class="notice" style="font-weight:850">
-                  네이버/구글 지도를 눌러 길 안내를 바로 열 수 있습니다.
-                </div>
+                
               </div>
             </div>
           </div>
