@@ -219,6 +219,46 @@
       .footer-grid{grid-template-columns:1fr;}
     }
 
+
+    /* Collapsible sticky header (mobile) */
+    .menu-toggle-only{display:none}
+
+    @media (max-width: 680px){
+      /* Compact header by default */
+      .topbar{transition: transform .18s ease;}
+      .topbar.is-collapsed .navlinks{display:none;}
+      .topbar.is-collapsed .cta{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+      .topbar.is-collapsed .cta #menuToggle{grid-column:1 / -1;}
+      .topbar.is-collapsed .brand{margin-bottom:2px;}
+      .topbar.is-collapsed .nav{gap:8px;}
+      /* Expanded menu layout */
+      .topbar .navlinks{
+        display:grid;
+        grid-template-columns:repeat(3, minmax(0,1fr));
+        gap:8px;
+        justify-content:stretch;
+      }
+      .topbar .navlinks button{
+        text-align:center;
+        padding:10px 10px;
+        border:1px solid var(--line);
+        background: rgba(15,23,42,.02);
+      }
+      .topbar .navlinks button.active{
+        background: rgba(34,197,94,.12);
+        border-color: rgba(34,197,94,.28);
+      }
+      /* Make CTA buttons fill nicely */
+      .cta{justify-content:stretch}
+      .cta .btn{flex:1 1 auto; min-width:0}
+      /* A bit less padding overall so content isn't hidden */
+      .hero{padding-top:18px}
+    }
+
 </style>
 </head>
 <body>
@@ -233,15 +273,17 @@
           </div>
         </a>
 
-        <nav class="navlinks" aria-label="메뉴">
+        <nav class="navlinks" id="mobileMenu" aria-label="메뉴">
           <button data-nav="home" class="active">캠핑장 안내</button>
           <button data-nav="sites">사이트/요금</button>
           <button data-nav="rules">예약 안내</button>
           <button data-nav="refund">환불 안내</button>
+          <button data-action="gallery">사진</button>
           <button data-nav="location">오시는 길</button>
         </nav>
 
         <div class="cta">
+          <button class="btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">메뉴</button>
           <a class="btn" href="tel:01088198931">전화</a>
           <a class="btn primary" href="sms:01088198931?body=%EC%9A%A9%EC%9D%B8%EC%A3%BC%EC%9B%90%EC%BA%A0%ED%95%91%EC%9E%A5%20%EC%98%88%EC%95%BD%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.%0A%EC%B2%B4%ED%81%AC%EC%9D%B8%20%EB%82%A0%EC%A7%9C%3A%0A%EC%9D%B8%EC%9B%90%3A%0A%EC%82%AC%EC%9D%B4%ED%8A%B8%EB%AA%85%3A">문자예약</a>
         </div>
@@ -340,7 +382,7 @@
               <p>사진 파일을 바꾸면 자동으로 갤러리가 바뀝니다. (GitHub에 올릴 때 동일 경로로 업로드)</p>
             </div>
           </div>
-          <div class="gallery" aria-label="갤러리">
+          <div id="gallery" class="gallery" aria-label="갤러리">
             <div class="g span6"><img src="assets/img/photo-02.jpg" alt="캠핑장 사진 2" loading="lazy"/></div>
             <div class="g span6"><img src="assets/img/photo-03.jpg" alt="캠핑장 사진 3" loading="lazy"/></div>
             <div class="g span4"><img src="assets/img/photo-04.jpg" alt="캠핑장 사진 4" loading="lazy"/></div>
@@ -623,7 +665,7 @@
   </footer>
 
   <script>
-    const pages = ["home","sites","rules","refund","location"];
+const pages = ["home","sites","rules","refund","location"];
     const navButtons = Array.from(document.querySelectorAll("[data-nav]"));
     const gotoButtons = Array.from(document.querySelectorAll("[data-goto]"));
 
@@ -636,15 +678,72 @@
       });
       window.scrollTo({top:0, behavior:"smooth"});
       history.replaceState(null,"","#"+name);
+      if(isMobile && isMobile()) setCollapsed(true);
     }
 
     navButtons.forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.nav)));
     gotoButtons.forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.goto)));
 
+    const topbar = document.querySelector(".topbar");
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    function isMobile(){ return window.matchMedia("(max-width: 680px)").matches; }
+
+    function setCollapsed(collapsed){
+      if(!topbar) return;
+      topbar.classList.toggle("is-collapsed", collapsed);
+      if(menuToggle){
+        menuToggle.setAttribute("aria-expanded", String(!collapsed));
+        menuToggle.textContent = collapsed ? "메뉴" : "접기";
+      }
+    }
+
+    // default: collapsed on mobile
+    function applyDefault(){
+      if(isMobile()) setCollapsed(true);
+      else setCollapsed(false);
+    }
+    applyDefault();
+    window.addEventListener("resize", applyDefault);
+
+    if(menuToggle){
+      menuToggle.addEventListener("click", ()=>{
+        const collapsed = topbar.classList.contains("is-collapsed");
+        setCollapsed(!collapsed);
+      });
+    }
+
+    // Gallery button: go home + scroll to gallery
+    document.querySelectorAll("[data-action='gallery']").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        showPage("home");
+        setTimeout(()=>{
+          const el = document.getElementById("gallery");
+          if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+        }, 60);
+        if(isMobile()) setCollapsed(true);
+      });
+    });
+
+    // When switching pages from nav, collapse on mobile to free space
+
+
     const hash = (location.hash||"#home").replace("#","");
     if(pages.includes(hash)) showPage(hash);
 
     document.getElementById("year").textContent = new Date().getFullYear();
+  
+
+    let lastY = window.scrollY;
+    window.addEventListener("scroll", ()=>{
+      if(!isMobile()) return;
+      const y = window.scrollY;
+      if(y > 120 && y > lastY + 5){
+        setCollapsed(true);
+      }
+      lastY = y;
+    }, {passive:true});
   </script>
 </body>
 </html>
