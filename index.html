@@ -260,34 +260,103 @@
     }
 
 
-    /* Embedded map */
-    .map iframe{display:block;width:100%;}
+    /* Mobile: use bottom-sheet menu to avoid huge sticky header */
     @media (max-width: 680px){
-      .map iframe{height:280px;}
+      /* Header compact */
+      .nav{flex-direction:row; align-items:center; justify-content:space-between; gap:10px; padding:10px 0;}
+      .brand{justify-content:flex-start; gap:10px;}
+      .brand small{display:none}
+      .brand > div > div{font-size:16px; white-space:nowrap}
+      .logo{width:34px;height:34px;border-radius:12px}
+
+      /* Hide inline nav links on mobile (use sheet) */
+      .navlinks{display:none !important;}
+
+      /* CTA: 3 buttons in a row */
+      .cta{display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; width:100%}
+      #menuToggle{justify-content:center; border:1px solid var(--line); background:rgba(15,23,42,.02);}
+      #menuToggle:active{transform:translateY(1px)}
+      .cta .btn{min-width:0; padding:12px 10px; font-weight:900}
+
+      /* Sheet */
+      .sheet{position:fixed; inset:0; z-index:999; display:none}
+      .sheet.is-open{display:block}
+      .sheet-backdrop{position:absolute; inset:0; background:rgba(15,23,42,.45);}
+      .sheet-panel{
+        position:absolute; left:0; right:0; bottom:0;
+        background:#fff;
+        border-top-left-radius:22px;
+        border-top-right-radius:22px;
+        box-shadow:0 -20px 50px rgba(15,23,42,.18);
+        padding:10px 14px 16px;
+        max-height:75vh;
+        overflow:auto;
+      }
+      .sheet-handle{
+        width:54px; height:5px; border-radius:999px;
+        background:rgba(15,23,42,.16);
+        margin:6px auto 10px;
+      }
+      .sheet-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+      .sheet-title{font-weight:950; font-size:16px;}
+      .sheet-close{
+        all:unset; cursor:pointer; padding:8px 10px;
+        border-radius:999px; border:1px solid var(--line);
+        background:rgba(15,23,42,.02); font-weight:900;
+      }
+      .sheet-grid{
+        display:grid;
+        grid-template-columns:repeat(2, minmax(0,1fr));
+        gap:10px;
+        margin-bottom:12px;
+      }
+      .sheet-item{
+        all:unset; cursor:pointer;
+        text-align:center;
+        padding:14px 12px;
+        border-radius:999px;
+        border:1px solid var(--line);
+        background:rgba(15,23,42,.02);
+        font-weight:950;
+      }
+      .sheet-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+      .sheet-note{margin-top:10px; color:var(--muted); font-size:12px;}
+      body.sheet-open{overflow:hidden}
+      /* Slightly reduce top padding */
+      .hero{padding-top:16px}
     }
 
 
-    /* Cleaner first impression on mobile */
-    @media (max-width: 680px){
-      .pill{font-size:13px;padding:7px 10px}
-      .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-      .hero-actions .btn{width:100%}
-      .hero-media .label{display:none;} /* hide file label */
-      .hero-media{min-height:220px}
-      .card.pad{padding:16px}
-      .feature{padding:12px}
+    /* Bottom sheet (works on all screens; toggled mainly on mobile) */
+    .sheet{position:fixed; inset:0; z-index:999; display:none}
+    .sheet.is-open{display:block}
+    .sheet-backdrop{position:absolute; inset:0; background:rgba(15,23,42,.45);}
+    .sheet-panel{
+      position:absolute; left:0; right:0; bottom:0;
+      background:#fff;
+      border-top-left-radius:22px;
+      border-top-right-radius:22px;
+      box-shadow:0 -20px 50px rgba(15,23,42,.18);
+      padding:10px 14px 16px;
+      max-height:75vh;
+      overflow:auto;
+      margin:0 auto;
+      max-width:640px;
     }
-
-
-    @media (max-width: 680px){
-      .topbar.is-collapsed .brand small{display:none;}
-      .topbar.is-collapsed .logo{width:34px;height:34px;border-radius:12px}
-    }
+    .sheet-handle{width:54px;height:5px;border-radius:999px;background:rgba(15,23,42,.16);margin:6px auto 10px;}
+    .sheet-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .sheet-title{font-weight:950;font-size:16px;}
+    .sheet-close{all:unset;cursor:pointer;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(15,23,42,.02);font-weight:900;}
+    .sheet-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+    .sheet-item{all:unset;cursor:pointer;text-align:center;padding:14px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(15,23,42,.02);font-weight:950;}
+    .sheet-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .sheet-note{margin-top:10px;color:var(--muted);font-size:12px;}
+    body.sheet-open{overflow:hidden}
 
 </style>
 </head>
 <body>
-  <header class="topbar is-collapsed">
+  <header class="topbar">
     <div class="container">
       <div class="nav">
         <a class="brand" href="#home" data-nav="home" aria-label="홈">
@@ -308,13 +377,41 @@
         </nav>
 
         <div class="cta">
-          <button class="btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">메뉴</button>
+          <button class="btn" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">☰ 메뉴</button>
           <a class="btn" href="tel:01088198931">전화</a>
           <a class="btn primary" href="sms:01088198931?body=%EC%9A%A9%EC%9D%B8%EC%A3%BC%EC%9B%90%EC%BA%A0%ED%95%91%EC%9E%A5%20%EC%98%88%EC%95%BD%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.%0A%EC%B2%B4%ED%81%AC%EC%9D%B8%20%EB%82%A0%EC%A7%9C%3A%0A%EC%9D%B8%EC%9B%90%3A%0A%EC%82%AC%EC%9D%B4%ED%8A%B8%EB%AA%85%3A">문자예약</a>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Menu Sheet -->
+  <div id="menuSheet" class="sheet" aria-hidden="true">
+    <div class="sheet-backdrop" data-sheet-close></div>
+    <div class="sheet-panel" role="dialog" aria-label="메뉴">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">메뉴</div>
+        <button class="sheet-close" type="button" data-sheet-close aria-label="닫기">닫기</button>
+      </div>
+
+      <div class="sheet-grid">
+        <button class="sheet-item" data-nav="home">캠핑장 안내</button>
+        <button class="sheet-item" data-nav="sites">사이트/요금</button>
+        <button class="sheet-item" data-nav="rules">예약 안내</button>
+        <button class="sheet-item" data-nav="refund">환불 안내</button>
+        <button class="sheet-item" data-action="gallery">사진</button>
+        <button class="sheet-item" data-nav="location">오시는 길</button>
+      </div>
+
+      <div class="sheet-actions">
+        <a class="btn" href="tel:01088198931">전화</a>
+        <a class="btn primary" href="sms:01088198931?body=%EC%9A%A9%EC%9D%B8%EC%A3%BC%EC%9B%90%EC%BA%A0%ED%95%91%EC%9E%A5%20%EC%98%88%EC%95%BD%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4.%0A%EC%B2%B4%ED%81%AC%EC%9D%B8%20%EB%82%A0%EC%A7%9C%3A%0A%EC%9D%B8%EC%9B%90%3A%0A%EC%82%AC%EC%9D%B4%ED%8A%B8%EB%AA%85%3A">문자예약</a>
+      </div>
+      <div class="sheet-note">* 메뉴는 화면을 가리지 않도록 아래에서 열립니다.</div>
+    </div>
+  </div>
+
 
   <main>
     <!-- HOME -->
@@ -323,7 +420,7 @@
         <div class="container">
           <div class="hero-grid">
             <div class="card pad">
-              <span class="pill">용인주원캠핑장 · 안내</span>
+              <span class="pill">안내 · 캠핑장 소개</span>
               <h1 class="title">용인주원캠핑장</h1>
               <p class="sub">
                 높게 우거진 화살나무가 3면으로 둘러싸여 하루 종일 그늘이 이어지는 아늑한 캠핑장입니다.
@@ -379,11 +476,7 @@
               </p>
             </div>
 
-            <div class="card pad">
-              <h3 style="margin:0 0 10px">캠핑장 특징</h3>
-              <div class="grid2">
-                <div class="feature"><b>사이트 구성</b><span>1-1~1-4 (총 4개)</span></div>
-                <div class="feature"><b>연못</b><span>캠핑장 내 연못</span></div>
+            <div class="feature"><b>연못</b><span>캠핑장 내 연못</span></div>
                 <div class="feature"><b>그늘</b><span>화살나무 숲, 하루종일 그늘</span></div>
                 <div class="feature"><b>운영</b><span>소규모 운영(여유/쉼)</span></div>
               </div>
@@ -612,27 +705,13 @@
               <p>주소: 경기 용인시 처인구 원삼면 보개원삼로1415번길 11-14</p>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <a class="btn" target="_blank" rel="noopener" href="https://map.naver.com/p/entry/place/1302239045?lng=127.307411&lat=37.1206426&placePath=%2Fhome&entry=plt&searchType=place&c=15.00,0,0,0,dh" target="_blank" rel="noopener" target="_blank" rel="noopener" target="_blank" rel="noopener">네이버지도</a>
+              <a class="btn" target="_blank" rel="noopener" href="https://naver.me/xOdsYLjb" target="_blank" rel="noopener">네이버지도</a>
               <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps?q=%EA%B2%BD%EA%B8%B0%20%EC%9A%A9%EC%9D%B8%EC%8B%9C%20%EC%B2%98%EC%9D%B8%EA%B5%AC%20%EC%9B%90%EC%82%BC%EB%A9%B4%20%EB%B3%B4%EA%B0%9C%EC%9B%90%EC%82%BC%EB%A1%9C1415%EB%B2%88%EA%B8%B8%2011-14">구글지도</a>
               <a class="btn primary" href="tel:01088198931">문의전화</a>
             </div>
           </div>
 
           <div class="card pad">
-            <div style="height:12px"></div>
-            <div class="map" aria-label="지도">
-              <iframe
-                title="용인주원캠핑장 지도"
-                src="https://www.google.com/maps?q=37.1206426,127.307411&z=15&output=embed"
-                width="100%" height="360" style="border:0;"
-                loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen>
-              </iframe>
-            </div>
-            <p class="small" style="margin:10px 0 0">
-              네이버지도로 열기: <a href="https://map.naver.com/p/entry/place/1302239045?lng=127.307411&lat=37.1206426&placePath=%2Fhome&entry=plt&searchType=place&c=15.00,0,0,0,dh" target="_blank" rel="noopener" style="text-decoration:underline">지도 링크</a>
-            </p>
-
             <div class="grid2">
               <div>
                 <h3 style="margin:0 0 8px">연락처</h3>
@@ -655,7 +734,9 @@
                   <span>보개원삼로1415번길 11-14</span>
                 </div>
                 <div style="height:10px"></div>
-                
+                <div class="notice" style="font-weight:850">
+                  네이버/구글 지도를 눌러 길 안내를 바로 열 수 있습니다.
+                </div>
               </div>
             </div>
           </div>
@@ -715,34 +796,11 @@ const pages = ["home","sites","rules","refund","location"];
       });
       window.scrollTo({top:0, behavior:"smooth"});
       history.replaceState(null,"","#"+name);
-      if(isMobile && isMobile()) setCollapsed(true);
+      
     }
 
     navButtons.forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.nav)));
     gotoButtons.forEach(btn=>btn.addEventListener("click",()=>showPage(btn.dataset.goto)));
-
-    const topbar = document.querySelector(".topbar");
-    const menuToggle = document.getElementById("menuToggle");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    function isMobile(){ return window.matchMedia("(max-width: 680px)").matches; }
-
-    function setCollapsed(collapsed){
-      if(!topbar) return;
-      topbar.classList.toggle("is-collapsed", collapsed);
-      if(menuToggle){
-        menuToggle.setAttribute("aria-expanded", String(!collapsed));
-        menuToggle.textContent = collapsed ? "메뉴" : "접기";
-      }
-    }
-
-    // default: collapsed on mobile
-    function applyDefault(){
-      if(isMobile()) setCollapsed(true);
-      else setCollapsed(false);
-    }
-    applyDefault();
-    window.addEventListener("resize", applyDefault);
 
     if(menuToggle){
       menuToggle.addEventListener("click", ()=>{
@@ -759,7 +817,7 @@ const pages = ["home","sites","rules","refund","location"];
           const el = document.getElementById("gallery");
           if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
         }, 60);
-        if(isMobile()) setCollapsed(true);
+        if(isMobile()) 
       });
     });
 
@@ -769,6 +827,60 @@ const pages = ["home","sites","rules","refund","location"];
     const hash = (location.hash||"#home").replace("#","");
     if(pages.includes(hash)) showPage(hash);
 
+    
+    // Mobile menu sheet (compact header)
+    const sheet = document.getElementById("menuSheet");
+    const menuToggle = document.getElementById("menuToggle");
+    const sheetClosers = Array.from(document.querySelectorAll("[data-sheet-close]"));
+    function isMobile(){ return window.matchMedia("(max-width: 680px)").matches; }
+
+    function openSheet(){
+      if(!sheet) return;
+      sheet.classList.add("is-open");
+      sheet.setAttribute("aria-hidden","false");
+      document.body.classList.add("sheet-open");
+      if(menuToggle) menuToggle.textContent = "닫기";
+    }
+    function closeSheet(){
+      if(!sheet) return;
+      sheet.classList.remove("is-open");
+      sheet.setAttribute("aria-hidden","true");
+      document.body.classList.remove("sheet-open");
+      if(menuToggle) menuToggle.textContent = "☰ 메뉴";
+    }
+
+    if(menuToggle){
+      menuToggle.addEventListener("click", ()=>{
+        if(!isMobile()) return;
+        if(sheet && sheet.classList.contains("is-open")) closeSheet();
+        else openSheet();
+      });
+    }
+    sheetClosers.forEach(el=>el.addEventListener("click", closeSheet));
+    window.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeSheet(); });
+
+    // Sheet menu navigation
+    document.querySelectorAll("#menuSheet [data-nav]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        showPage(btn.dataset.nav);
+        closeSheet();
+      });
+    });
+
+    // Gallery action (sheet + desktop)
+    document.querySelectorAll("[data-action='gallery']").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        showPage("home");
+        closeSheet();
+        setTimeout(()=>{
+          const el = document.getElementById("gallery");
+          if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+        }, 80);
+      });
+    });
+
+    window.addEventListener("resize", ()=>{ if(!isMobile()) closeSheet(); });
+
     document.getElementById("year").textContent = new Date().getFullYear();
   
 
@@ -777,7 +889,7 @@ const pages = ["home","sites","rules","refund","location"];
       if(!isMobile()) return;
       const y = window.scrollY;
       if(y > 120 && y > lastY + 5){
-        setCollapsed(true);
+        
       }
       lastY = y;
     }, {passive:true});
