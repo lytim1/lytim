@@ -10,23 +10,31 @@
   <meta property="og:type" content="website" />
   <style>
     :root{
-      --bg:#0b0e12;
-      --card:#111723;
-      --card2:#0f1622;
-      --text:#eaf0ff;
-      --muted:#b7c0d6;
-      --line:rgba(255,255,255,.12);
-      --brand:#7dd3fc;
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --card2:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:rgba(15,23,42,.10);
+      --brand:#38bdf8;
       --brand2:#a78bfa;
-      --ok:#34d399;
-      --warn:#fbbf24;
-      --shadow: 0 20px 55px rgba(0,0,0,.42);
+      --ok:#10b981;
+      --warn:#f59e0b;
+      --shadow: 0 18px 40px rgba(15,23,42,.12);
       --radius:18px;
       --max:1120px;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{
+*{box-sizing:border-box}
+    html,body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR",Arial,sans-serif;
+      background:
+        radial-gradient(1100px 700px at 18% -10%, rgba(56,189,248,.22), transparent 60%),
+        radial-gradient(1100px 700px at 92% 0%, rgba(167,139,250,.20), transparent 60%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      color:var(--text);
+      line-height:1.55
+    }
+body{
       font-family: system-ui,-apple-system,Segoe UI,Roboto,"Noto Sans KR",Arial,sans-serif;
       background:
         radial-gradient(1100px 700px at 18% -10%, rgba(125,211,252,.18), transparent 60%),
@@ -41,7 +49,7 @@
     .topbar{
       position:sticky;top:0;z-index:50;
       backdrop-filter: blur(14px);
-      background: rgba(11,14,18,.68);
+      background: rgba(255,255,255,.72);
       border-bottom:1px solid var(--line);
     }
     .nav{
@@ -85,8 +93,8 @@
       color:#0b0e12;
     }
     .btn.ghost{
-      background:transparent;
-      border-color:rgba(255,255,255,.16);
+      background:rgba(15,23,42,.03);
+      border-color:var(--line);
       color:var(--text);
     }
     .pill{
@@ -152,15 +160,15 @@
       background-size: cover;
       background-position: center;
       opacity:.35;
-      mix-blend-mode: screen;
+      mix-blend-mode: multiply;
       filter: saturate(1.1) contrast(1.05);
     }
     .photo .tag{
       position:absolute;left:16px;bottom:16px;z-index:2;
       display:inline-flex;align-items:center;gap:8px;
       padding:10px 12px;border-radius:999px;
-      background: rgba(11,14,18,.65);
-      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.78);
+      border:1px solid var(--line);
       color: var(--text);
       font-weight:800;
     }
@@ -176,7 +184,7 @@
     .feature{
       padding:16px;border-radius:16px;
       border:1px solid var(--line);
-      background: rgba(0,0,0,.16);
+      background: rgba(15,23,42,.035);
     }
     .feature h3{margin:0 0 6px;font-size:16px}
     .feature p{margin:0;color:var(--muted);font-size:14px}
@@ -185,11 +193,11 @@
     }
     .room{
       overflow:hidden;border-radius:18px;border:1px solid var(--line);
-      background: rgba(0,0,0,.16);
+      background: rgba(15,23,42,.035);
       transition: transform .12s ease, border-color .2s ease, background .2s ease;
       cursor:pointer;
     }
-    .room:hover{transform: translateY(-2px);border-color:rgba(125,211,252,.35);background: rgba(0,0,0,.22)}
+    .room:hover{transform: translateY(-2px);border-color:rgba(125,211,252,.35);background: rgba(15,23,42,.05)}
     .room .thumb{
       height:160px;
       background: linear-gradient(135deg, rgba(125,211,252,.15), rgba(167,139,250,.12));
@@ -247,7 +255,7 @@
     .g.span3{grid-column: span 3}
     .map-wrap{
       border-radius:18px;overflow:hidden;border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
+      background: rgba(15,23,42,.04);
       min-height:340px;
     }
     iframe{border:0;width:100%;height:360px}
@@ -267,7 +275,7 @@
     /* Modal */
     .modal-backdrop{
       position:fixed;inset:0;
-      background: rgba(0,0,0,.62);
+      background: rgba(15,23,42,.45);
       display:none;align-items:center;justify-content:center;
       padding:18px;
       z-index:100;
@@ -277,7 +285,7 @@
       width:min(900px, 100%);
       border-radius:22px;
       border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(180deg, rgba(17,23,35,.96), rgba(15,22,34,.92));
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(246,247,251,.96));
       box-shadow: var(--shadow);
       overflow:hidden;
     }
@@ -302,7 +310,7 @@
     }
     .modal-info{
       border-radius:18px;border:1px solid var(--line);
-      background: rgba(0,0,0,.18);
+      background: rgba(15,23,42,.04);
       padding:14px;
     }
     .modal-info .row{display:flex;justify-content:space-between;gap:12px;margin:8px 0;color:var(--muted);font-size:14px}
@@ -561,25 +569,7 @@
 
           <div style="height:14px"></div>
 
-          <div class="card pad">
-            <div class="section-head" style="margin-bottom:8px">
-              <div>
-                <h2 style="font-size:20px;margin:0">픽업 안내</h2>
-                <p style="margin:0;color:var(--muted)">픽업은 사전 문의/예약이 필요합니다.</p>
-              </div>
-              <span class="pill">픽업장소: 원삼면사무소</span>
-            </div>
-            <div class="grid2">
-              <div class="feature">
-                <h3>입실 픽업</h3>
-                <p>장소: 원삼면사무소 · 시간: 펜션문의 · 탑승: 4명 · 비용/예약: 펜션문의</p>
-              </div>
-              <div class="feature">
-                <h3>퇴실 픽업</h3>
-                <p>장소: 원삼면사무소 · 시간: 펜션문의 · 탑승: 4명 · 비용/예약: 펜션문의</p>
-              </div>
-            </div>
-          </div>
+          
 
           <div style="height:14px"></div>
 
